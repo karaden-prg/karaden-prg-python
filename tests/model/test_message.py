@@ -175,6 +175,22 @@ def test_statusを出力できる():
     assert expected == message.status
 
 
+def test_APIバージョン20230101ではis_shorten_clickedはNoneが出力される():
+    # APIバージョン2023-01-01ではnullが返ってくる
+    expected = None
+    message = Message()
+    message.set_property('is_shorten_clicked', expected)
+    assert expected == message.is_shorten_clicked
+
+
+def test_APIバージョン20231201ではis_shorten_clickedはBooleanが出力される():
+    # APIバージョン2023-12-01ではbooleanが返ってくる
+    expected = True
+    message = Message()
+    message.set_property('is_shorten_clicked', expected)
+    assert expected == message.is_shorten_clicked
+
+
 def test_resultを出力できる():
     expected = 'result'
     message = Message()

@@ -48,6 +48,7 @@ def test_一覧():
     assert 1 == len(tags)
     assert 'string' == tags[0]
     assert message.is_shorten
+    assert message.is_shorten_clicked
     assert 'done' == message.result
     assert 'done' == message.status
     assert 'none' == message.sent_result
@@ -92,6 +93,7 @@ def test_作成():
     assert 1 == len(tags)
     assert 'string' == tags[0]
     assert message.is_shorten
+    assert message.is_shorten_clicked
     assert 'done' == message.result
     assert 'done' == message.status
     assert 'none' == message.sent_result
@@ -130,6 +132,7 @@ def test_詳細():
     assert 1 == len(tags)
     assert 'string' == tags[0]
     assert message.is_shorten
+    assert message.is_shorten_clicked
     assert 'done' == message.result
     assert 'done' == message.status
     assert 'none' == message.sent_result
@@ -168,6 +171,7 @@ def test_キャンセル():
     assert 1 == len(tags)
     assert 'string' == tags[0]
     assert message.is_shorten
+    assert message.is_shorten_clicked
     assert 'done' == message.result
     assert 'done' == message.status
     assert 'none' == message.sent_result
