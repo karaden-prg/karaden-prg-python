@@ -6,7 +6,7 @@ from karaden.request_options import RequestOptions, RequestOptionsBuilder
 class TestHelper:
     api_base = 'http://localhost:4010'
     api_key = '123'
-    api_version = '2023-01-01'
+    api_version = '2023-12-01'
     tenant_id = '159bfd33-b9b7-f424-4755-c119b324591d'
 
     @classmethod

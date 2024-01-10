@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, annotations, unicode_literals
 
 __author__ = 'cpaas-dev-admin-om'
 __email__ = 'cpaas-dev-admin-om@nttcoms.com'
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
 from karaden.config import Config
 from karaden.request_options import RequestOptions

@@ -36,6 +36,10 @@ class Message(Requestable):
     @property
     def is_shorten(self) -> bool:
         return self.get_property('is_shorten')
+    
+    @property
+    def is_shorten_clicked(self) -> bool | None:
+        return self.get_property('is_shorten_clicked')
 
     @property
     def status(self) -> list:
