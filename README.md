@@ -28,7 +28,7 @@ params = (
     .new_builder()
     .with_service_id(1)
     .with_to('09012345678')
-    .with_body('<本文>')
+    .with_body('本文')
     .build()
 )
 message = Message.create(params)
@@ -49,4 +49,18 @@ request_options = (
     .build()
 )
 message = Message.detail(params, request_options)
+```
+### タイムアウトについて
+通信をするファイルサイズや実行環境の通信速度によってはHTTP通信時にタイムアウトが発生する可能性があります。<br />
+何度も同じような現象が起こる際は、ファイルサイズの調整もしくは`RequestOptions`からタイムアウトの時間を増やして、再度実行してください。
+```python
+request_options = (
+    RequestOptions.new_builder()
+    .with_api_key('<トークン>')
+    .with_tenant_id('<テナントID>')
+    .with_connection_timeout(<秒>)
+    .with_read_timeout(<秒>)
+    .build()
+)
+bulk_message = BulkMessageService.create('<ファイルパス>', request_options)
 ```

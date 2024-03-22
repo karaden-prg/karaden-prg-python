@@ -1,12 +1,16 @@
 from __future__ import absolute_import, division, annotations, unicode_literals
 
 import json
+import tempfile
 import pytest
 
+from karaden.exception.file_upload_failed_exception import FileUploadFailedException
 from karaden.request_options import RequestOptions
 from karaden.model.karaden_object import KaradenObject
 from karaden.model.message import Message
 from karaden.utility import Utility
+from httpretty import HTTPretty, httprettified
+from httpretty.core import HTTPrettyRequest
 
 
 def test_objectのフィールドが存在しない場合はKaradenObjectが返る():
@@ -130,3 +134,90 @@ def test_オブジェクトの配列の要素はデシリアライズするとKa
     assert isinstance(obj.get_property('test'), list)
     assert isinstance(obj.get_property('test')[0], cls)
     assert item['test'] == obj.get_property('test')[0].get_property('test')
+
+
+@httprettified(allow_net_connect=False)
+def test_指定のURLにfileパスのファイルをPUTメソッドでリクエストする():
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        filename = temp_file.name
+
+    signed_url = 'https://example.com/'
+
+    def callback(
+        request: HTTPrettyRequest,
+        url: str,
+        headers: dict):
+        assert 'PUT' == request.method
+        assert signed_url == request.url
+        assert 'application/octet-stream' == request.headers.get_content_type()
+
+        return (200, '', '')
+
+    HTTPretty.register_uri(HTTPretty.PUT, signed_url, body=callback)
+
+    Utility.put_signed_url(signed_url, filename)
+
+
+@httprettified(allow_net_connect=False)
+def test_レスポンスコードが200以外だとFileUploadFailedExceptionが発生する():
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        filename = temp_file.name
+
+    signed_url = 'https://example.com/'
+
+    def callback(
+        request: HTTPrettyRequest,
+        url: str,
+        headers: dict):
+        assert 'PUT' == request.method
+        assert signed_url == request.url
+
+        return (403, '', '')
+
+    HTTPretty.register_uri(HTTPretty.PUT, signed_url, body=callback)
+
+    with pytest.raises(FileUploadFailedException):
+        Utility.put_signed_url(signed_url, filename)
+
+
+@httprettified(allow_net_connect=False)
+def test_例外が発生するとFileUploadFailedExceptionをリスローする():
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        filename = temp_file.name
+
+    signed_url = 'https://example.com/'
+
+    def callback(
+        request: HTTPrettyRequest,
+        url: str,
+        headers: dict):
+        raise Exception()
+
+    HTTPretty.register_uri(HTTPretty.PUT, signed_url, body=callback)
+
+    with pytest.raises(FileUploadFailedException):
+        Utility.put_signed_url(signed_url, filename)
+
+
+@httprettified(allow_net_connect=False)
+def test_ContentTypeを指定できる():
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        filename = temp_file.name
+
+    signed_url = 'https://example.com/'
+    content_type = 'text/csv'
+
+    def callback(
+        request: HTTPrettyRequest,
+        url: str,
+        headers: dict):
+        assert 'PUT' == request.method
+        assert signed_url == request.url
+        assert content_type == request.headers.get_content_type()
+
+        return (200, '', '')
+
+    HTTPretty.register_uri(HTTPretty.PUT, signed_url, body=callback)
+
+    Utility.put_signed_url(signed_url, filename, content_type)
+    
