@@ -17,3 +17,11 @@ class ResponseInterface(metaclass=abc.ABCMeta):
     @abc.abstractproperty
     def is_error(self) -> bool:
         raise NotImplementedError()
+
+    @abc.abstractproperty
+    def status_code(self) -> int:
+        raise NotImplementedError()
+
+    @abc.abstractproperty
+    def headers(self) -> dict:
+        raise NotImplementedError()
