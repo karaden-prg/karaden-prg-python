@@ -2,12 +2,14 @@ from __future__ import absolute_import, division, annotations, unicode_literals
 
 __author__ = 'cpaas-dev-admin-om'
 __email__ = 'cpaas-dev-admin-om@nttcoms.com'
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 from karaden.config import Config
 from karaden.request_options import RequestOptions
 from karaden.model.karaden_object import KaradenObject
 from karaden.model.message import Message
+from karaden.model.bulk_file import BulkFile
+from karaden.model.bulk_message import BulkMessage
 from karaden.model.error import Error
 from karaden.model.collection import Collection
 from karaden.exception.bad_request_exception import BadRequestException
@@ -31,9 +33,13 @@ Utility.object_types = {
     Collection.OBJECT_NAME: Collection,
     Message.OBJECT_NAME: Message,
     Error.OBJECT_NAME: Error,
+    BulkFile.OBJECT_NAME: BulkFile,
+    BulkMessage.OBJECT_NAME: BulkMessage,
 }
 
 Message.requestor = RequestsRequestor()
+BulkFile.requestor = RequestsRequestor()
+BulkMessage.requestor = RequestsRequestor()
 
 RequestsResponse.errors = {
     BadRequestException.STATUS_CODE: BadRequestException,

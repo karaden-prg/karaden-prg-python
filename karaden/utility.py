@@ -1,12 +1,18 @@
 from __future__ import absolute_import, division, annotations, unicode_literals
 
-from typing import Any
+from typing import Any, Tuple
+
+import requests
+
+from karaden.exception.file_upload_failed_exception import FileUploadFailedException
 from karaden.request_options import RequestOptions
 
 
 class Utility:
     DEFAULT_OBJECT_NAME: str
     object_types: dict
+    DEFAULT_CONNECTION_TIMEOUT = 10.0
+    DEFAULT_READ_TIMEOUT = 30.0
 
     @classmethod
     def convert_to_karaden_object(cls, contents: dict, request_options: RequestOptions) -> Any:
@@ -34,3 +40,25 @@ class Utility:
         elif isinstance(value, dict):
             value = cls.convert_to_karaden_object(value, request_options)
         return value
+
+    @classmethod
+    def put_signed_url(cls, singed_url: str, filename: str, content_type = 'application/octet-stream', request_options: RequestOptions = None) -> None:
+        try:
+            timeout = Utility.get_timeout(request_options)
+
+            with open(filename, 'rb') as file:
+                response = requests.put(singed_url, data=file, headers={'Content-Type': content_type}, timeout=timeout)
+
+                if response.status_code != 200:
+                    raise FileUploadFailedException()
+
+        except FileUploadFailedException as e1:
+            raise
+        except Exception as e2:
+            raise FileUploadFailedException() from e2
+
+    @classmethod
+    def get_timeout(cls, request_options: RequestOptions = None) -> Tuple[float, float]:
+        connection_timeout = getattr(request_options, 'connection_timeout', Utility.DEFAULT_CONNECTION_TIMEOUT)
+        read_timeout = getattr(request_options, 'read_timeout', Utility.DEFAULT_READ_TIMEOUT)
+        return (connection_timeout, read_timeout)

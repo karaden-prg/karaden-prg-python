@@ -4,9 +4,9 @@ from karaden.request_options import RequestOptions
 
 
 class Config:
-    VERSION = '1.1.0'
+    VERSION = '1.2.0'
     DEFAULT_API_BASE = 'https://prg.karaden.jp/api'
-    DEFALUT_API_VERSION = '2023-12-01'
+    DEFALUT_API_VERSION = '2024-03-01'
 
     api_version: str = None
     api_key: str = None

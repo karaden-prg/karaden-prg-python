@@ -9,13 +9,14 @@ from karaden.config import Config
 from karaden.request_options import RequestOptions
 from karaden.net.requestor_interface import RequestorInterface
 from karaden.net.requests_response import RequestsResponse
+from karaden.net.requests_no_contents_response import RequestsNoContentsResponse
 from karaden.net.response_interface import ResponseInterface
 
 
 class RequestsRequestor(RequestorInterface):
     DEFAULT_USER_AGENT = 'Karaden/Python/'
 
-    def send(self, method: str, path: str, params: dict, data: dict, request_options: RequestOptions = None) -> ResponseInterface:
+    def send(self, method: str, path: str, params: dict, data: dict, request_options: RequestOptions = None, is_no_contents: bool = False, allow_redirects: bool = True) -> ResponseInterface:
         request_options = Config.as_request_options().merge(request_options)
         request_options.validate()
 
@@ -36,8 +37,8 @@ class RequestsRequestor(RequestorInterface):
 
         timeout = (request_options.connection_timeout, request_options.read_timeout)
 
-        response = requests.request(method, url, params=params, data=data, headers=headers, timeout=timeout, proxies=proxies)
-        return RequestsResponse(response, request_options)
+        response = requests.request(method, url, params=params, data=data, headers=headers, timeout=timeout, proxies=proxies, allow_redirects=allow_redirects)
+        return RequestsResponse(response, request_options) if not is_no_contents else RequestsNoContentsResponse(response, request_options)
 
     def build_user_agent(self, request_options: RequestOptions) -> str:
         return request_options.user_agent if request_options.user_agent is None else self.DEFAULT_USER_AGENT
