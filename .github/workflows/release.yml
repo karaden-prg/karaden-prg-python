@@ -1,0 +1,36 @@
+name: Publish Package to PyPI
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10.13'
+      - name: Build Artifacts
+        run: |
+          python -m pip install build twine
+          python -m build
+          python -m twine check --strict dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-distribution-package
+          path: dist/
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: prod
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-distribution-package
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
