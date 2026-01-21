@@ -77,11 +77,10 @@ def test_is_shortenがFalseの場合は送信データは文字列のfalseにな
     assert expected == data['is_shorten']
 
 def test_is_shortenが指定なしの場合は送信データにis_shortenはない():
-    expected = None
     params = MessageCreateParams(1, 'to', 'body')
 
     data = params.to_data()
-    assert 'is_shorten' not in data.keys();
+    assert 'is_shorten' not in data.keys()
 
 def test_service_idを入力できる():
     expected = 'service_id'
