@@ -1,9 +1,5 @@
 from __future__ import absolute_import, division, annotations, unicode_literals
 
-__author__ = 'cpaas-dev-admin-om'
-__email__ = 'cpaas-dev-admin-om@nttcoms.com'
-__version__ = '1.2.0'
-
 from karaden.config import Config
 from karaden.request_options import RequestOptions
 from karaden.model.karaden_object import KaradenObject
@@ -23,7 +19,11 @@ from karaden.net.requests_requestor import RequestsRequestor
 from karaden.net.requests_response import RequestsResponse
 from karaden.utility import Utility
 
+from .__version__ import (
+    __version__,
+)
 
+Config.VERSION = __version__
 Config.api_base = Config.DEFAULT_API_BASE
 Config.api_version = Config.DEFALUT_API_VERSION
 

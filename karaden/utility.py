@@ -52,10 +52,10 @@ class Utility:
                 if response.status_code != 200:
                     raise FileUploadFailedException()
 
-        except FileUploadFailedException as e1:
+        except FileUploadFailedException:
             raise
-        except Exception as e2:
-            raise FileUploadFailedException() from e2
+        except Exception as e:
+            raise FileUploadFailedException() from e
 
     @classmethod
     def get_timeout(cls, request_options: RequestOptions = None) -> Tuple[float, float]:

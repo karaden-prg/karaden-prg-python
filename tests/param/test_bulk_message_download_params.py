@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, annotations, unicode_literals
 import os
 import tempfile
 import pytest
-from datetime import datetime, timezone, timedelta
 from karaden.exception.invalid_params_exception import InvalidParamsException
 from karaden.param.bulk.bulk_message_download_params import BulkMessageDownloadParams
 
