@@ -262,4 +262,4 @@ def test_bulk_結果取得():
     )
     output = BulkMessage.list_message(params, request_options)
 
-    assert output == None
+    assert output is None

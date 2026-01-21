@@ -1,0 +1,7 @@
+__title__ = 'karaden-prg-python'
+__description__ = 'Python library for the Karaden API'
+__url__ = 'https://github.com/karaden-prg/karaden-prg-python'
+__version__ = '1.2.1'
+__author__ = 'cpaas-dev-admin-om'
+__author_email__ = 'cpaas-dev-admin-om@nttcoms.com'
+__license__ = 'MIT license'

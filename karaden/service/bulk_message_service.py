@@ -65,8 +65,8 @@ class BulkMessageService:
 
         try:
             BulkMessageService.get_contents(download_url, os.path.normpath(os.path.abspath(params.directory_path)), request_options)
-        except:
-            raise FileDownloadFailedException()
+        except Exception as e:
+            raise FileDownloadFailedException() from e
 
         return True
 
